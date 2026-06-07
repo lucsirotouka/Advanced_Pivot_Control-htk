@@ -7,13 +7,13 @@
 //
 
 plugins {
-    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT'
     id 'maven-publish'
 }
 
 version = project.mod_version
 group = project.maven_group
-def targetJavaVersion = 17
+def targetJavaVersion = 25
 
 
 repositories {
@@ -26,17 +26,16 @@ repositories {
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Cloth config
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+    api("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
     // Mod Menu
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {
@@ -64,19 +63,20 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+base {
+    archivesName = project.mod_id + project.generated_file_name_addon
+}
+
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
-    archivesBaseName = project.mod_id + project.generated_file_name_addon
-    // Uncomment this line to generate a de-obfuscated jar
-    // withSourcesJar()
 }
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
+        rename { "${it}_${base.archivesName.get()}" }
     }
 }
 

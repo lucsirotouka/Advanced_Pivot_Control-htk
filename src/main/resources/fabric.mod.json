@@ -15,9 +15,9 @@
 	"modmenu": ["winterwolfsv.config.ModMenu"]
   },
   "depends": {
-	"fabricloader": "*",
-	"fabric": "*",
-	"minecraft": ">=1.20.0",
+	"fabricloader": ">=0.18.6",
+	"fabric-api": "*",
+	"minecraft": ">=26.1",
 	"cloth-config": "*"
   }
 }
